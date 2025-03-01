@@ -1,0 +1,7 @@
+body {
+  margin: 0 auto;
+  min-width: 320px;
+  width: 1200px;
+  min-height: 100vh;
+  background-color: #5236ab;
+}

@@ -1,0 +1,46 @@
+%centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.cardContainer {
+  margin: 15px 10px;
+  background-color: #f8f8f8 !important;
+
+  .card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .departure,
+    .destination {
+      @extend %centered;
+      padding: 10px;
+    }
+
+    .onTheWay {
+      @extend %centered;
+      gap: 10px;
+
+      .lineHorizontal {
+        position: relative;
+        background: #aaa;
+        height: 2px;
+        width: 135px;
+
+        &:before {
+          content: "";
+          position: absolute;
+          width: 0px;
+          height: 0px;
+          top: -4px;
+          border: 5px solid transparent;
+          right: -15px;
+          border-left: 15px solid #aaa;
+        }
+      }
+    }
+  }
+}
