@@ -1,19 +1,10 @@
-%centered {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-}
-
-.cardContainer {
-  margin: 10px;
+.container {
+  margin: 10px 0px;
   background-color: #f0f0f0 !important;
 
   a {
     text-decoration: none;
     color: #3f3f3f;
-    color: inherit;
-    display: block;
   }
 
   .card {
@@ -21,15 +12,12 @@
     align-items: center;
     justify-content: space-between;
 
-    .departure,
-    .destination {
-      @extend %centered;
-      padding: 10px;
-    }
-
-    .onTheWay {
-      @extend %centered;
-      gap: 10px;
+    .pricaAndDuration {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
 
       .lineHorizontal {
         position: relative;

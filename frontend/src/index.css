@@ -3,5 +3,5 @@ body {
   min-width: 320px;
   width: 1200px;
   min-height: 100vh;
-  background-color: #5236ab;
+  background: linear-gradient(135deg, #5236ab 0%, #754bff 100%);
 }

@@ -1,74 +1,67 @@
-import { FlightCard } from "./FlightCard/FlightCard";
-import { Filter } from "./Filter/Filter";
-import { IFlight } from "../../types/flight";
+import { useState } from "react";
+import { MenuItem, Typography } from "@mui/material";
 
-const FlightSelection: React.FC = () => {
+import { IFlight } from "../../types/flight";
+import { Filter } from "../../components/Filter/Filter";
+import { FlightCard } from "./FlightCard/FlightCard";
+import { mockData } from "../../store";
+
+export const FlightSelection: React.FC = () => {
+  const [sortedFlights, setSortedFlights] = useState<IFlight[]>(mockData);
+
+  const clearFilters = (): void => setSortedFlights(mockData);
+
+  const sortByPrice = (): void =>
+    setSortedFlights([...mockData].sort((a, b) => a.price - b.price));
+
+  const sortByDate = (): void =>
+    setSortedFlights(
+      [...mockData].sort(
+        (a, b) =>
+          new Date(a.departureDateTime).getTime() -
+          new Date(b.departureDateTime).getTime()
+      )
+    );
+
+  const sortByDuration = (): void => {
+    setSortedFlights([...mockData].sort((a, b) => a.duration - b.duration));
+  };
+
+  const sortByArrivalLocation = (): void =>
+    setSortedFlights(
+      [...mockData].sort((a, b) =>
+        a.arrivalLocation.localeCompare(b.arrivalLocation)
+      )
+    );
+
   return (
     <>
-      <Filter />
-      {mockData.map((flight) => (
-        <FlightCard flight={flight} key={flight.id} />
-      ))}
+      <Filter label="Sorteeri lennud">
+        <MenuItem value="" onClick={clearFilters}>
+          <em>Tühista filtrid</em>
+        </MenuItem>
+        <MenuItem value="arrival" onClick={sortByArrivalLocation}>
+          Tähestikulises järjekorras
+        </MenuItem>
+        <MenuItem value="date" onClick={sortByDate}>
+          Kuupäeva järgi
+        </MenuItem>
+        <MenuItem value="duration" onClick={sortByDuration}>
+          Lühike lennuaeg
+        </MenuItem>
+        <MenuItem value="price" onClick={sortByPrice}>
+          Hinna järgi kasvavalt
+        </MenuItem>
+      </Filter>
+      {sortedFlights.length === 0 ? (
+        <Typography variant="h5" sx={{ textAlign: "center", color: "#fff" }}>
+          Hetkel lende pole.
+        </Typography>
+      ) : (
+        sortedFlights.map((flight: IFlight) => (
+          <FlightCard flight={flight} key={flight.id} />
+        ))
+      )}
     </>
   );
 };
-
-export default FlightSelection;
-
-const mockData: IFlight[] = [
-  {
-    id: 1,
-    departureLocation: "Tallinn",
-    departureTime: "13:00",
-    departureDate: "02.03.2025",
-    arrivalLocation: "Stockholm",
-    arrivalTime: "13:30",
-    arrivalDate: "02.03.2025",
-    price: 100,
-    duration: "1:30",
-  },
-  {
-    id: 2,
-    departureLocation: "Tallinn",
-    departureTime: "09:00",
-    departureDate: "03.03.2025",
-    arrivalLocation: "Helsinki",
-    arrivalTime: "09:40",
-    arrivalDate: "03.03.2025",
-    price: 70,
-    duration: "0:40",
-  },
-  {
-    id: 3,
-    departureLocation: "Tallinn",
-    departureTime: "15:30",
-    departureDate: "04.03.2025",
-    arrivalLocation: "London",
-    arrivalTime: "17:00",
-    arrivalDate: "04.03.2025",
-    price: 250,
-    duration: "2:45",
-  },
-  {
-    id: 4,
-    departureLocation: "Tallinn",
-    departureTime: "07:00",
-    departureDate: "05.03.2025",
-    arrivalLocation: "Berlin",
-    arrivalTime: "08:30",
-    arrivalDate: "05.03.2025",
-    price: 180,
-    duration: "1:45",
-  },
-  {
-    id: 5,
-    departureLocation: "Tallinn",
-    departureTime: "18:00",
-    departureDate: "06.03.2025",
-    arrivalLocation: "Paris",
-    arrivalTime: "20:30",
-    arrivalDate: "06.03.2025",
-    price: 300,
-    duration: "2:30",
-  },
-];

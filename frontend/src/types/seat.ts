@@ -1,6 +1,7 @@
 export interface ISeat {
-  seatNumber: string;
+  id: string;
+  isAvailable: boolean;
+  isNearWindow: boolean;
+  isExtraLegroom: boolean;
   isNearExit: boolean;
-  isNearWindos: boolean;
-  isDouble: boolean;
 }

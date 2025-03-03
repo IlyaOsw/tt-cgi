@@ -1,5 +1,5 @@
 .wrapper {
-  height: 100vh;
+  margin-top: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -8,8 +8,9 @@
 
 .text {
   letter-spacing: 1px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-style: italic;
+  color: #fff;
 }
 
 .loader {
@@ -41,7 +42,7 @@
 }
 
 .loader:after {
-  color: #0097b2;
+  color: #e41937;
   transform: rotateY(70deg);
   animation-delay: 0.4s;
 }

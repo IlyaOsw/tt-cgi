@@ -1,11 +1,12 @@
+import { ISeat } from "./seat";
+//FIX
 export interface IFlight {
   id: number;
   departureLocation: string;
-  departureTime: string;
-  departureDate: string;
+  departureDateTime: string;
   arrivalLocation: string;
-  arrivalTime: string;
-  arrivalDate: string;
+  arrivalDateTime: string;
   price: number;
-  duration: string;
+  duration: number;
+  seats: any;
 }

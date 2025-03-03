@@ -8,33 +8,33 @@ import {
 import { Link } from "react-router-dom";
 
 import { FlightCardPropsType } from "../../../types/flight-card";
+import { convertMinutesToHours } from "../../../utils/convert-minutes-to-hours";
+import { convertTime } from "../../../utils/convert-time";
 import styles from "./FlightCard.module.scss";
 
 export const FlightCard: React.FC<FlightCardPropsType> = ({ flight }) => {
   return (
-    <Card className={styles.cardContainer}>
+    <Card className={styles.container}>
       <CardActionArea>
         <Link to={`/ticket/${flight.id}`}>
           <CardContent className={styles.card}>
-            <Box className={styles.departure}>
-              <Typography variant="h6">
-                From {flight.departureLocation}
-              </Typography>
+            <Box>
+              <Typography variant="h6">{flight.departureLocation}</Typography>
               <Typography variant="body1">
-                {flight.departureTime} | {flight.departureDate}
+                {convertTime(flight.departureDateTime)}
               </Typography>
             </Box>
-            <Box className={styles.onTheWay}>
-              <Typography variant="h6">{flight.price} €</Typography>
+            <Box className={styles.pricaAndDuration}>
+              <Typography variant="h6">Hind: {flight.price}€</Typography>
               <Box className={styles.lineHorizontal} />
               <Typography variant="body1">
-                Lennuaeg {flight.duration}
+                Lennuaeg {convertMinutesToHours(flight.duration)}
               </Typography>
             </Box>
-            <Box className={styles.destination}>
-              <Typography variant="h6">To {flight.arrivalLocation}</Typography>
+            <Box>
+              <Typography variant="h6">{flight.arrivalLocation}</Typography>
               <Typography variant="body1">
-                {flight.arrivalTime} | {flight.arrivalDate}
+                {convertTime(flight.arrivalDateTime)}
               </Typography>
             </Box>
           </CardContent>

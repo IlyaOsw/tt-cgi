@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import FlightSelection from "../pages/FlightSelection/FlightSelection";
+import { FlightSelection } from "../pages/FlightSelection/FlightSelection";
 import { Loader } from "../components/Loader/Loader";
 
 const TicketSelection = React.lazy(
