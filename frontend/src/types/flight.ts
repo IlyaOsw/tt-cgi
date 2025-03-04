@@ -1,5 +1,5 @@
 import { ISeat } from "./seat";
-//FIX
+
 export interface IFlight {
   id: number;
   departureLocation: string;
@@ -8,5 +8,5 @@ export interface IFlight {
   arrivalDateTime: string;
   price: number;
   duration: number;
-  seats: any;
+  seats: ISeat[];
 }

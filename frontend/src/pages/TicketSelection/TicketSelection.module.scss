@@ -2,6 +2,10 @@
   display: flex;
   gap: 25px;
 
+  h5 {
+    margin: 25px 0px;
+  }
+
   .card {
     display: flex;
     align-items: center;
@@ -10,10 +14,8 @@
     margin: 15px 0px;
     width: 100%;
   }
-}
 
-.link {
-  text-decoration: none;
-  color: #fff;
-  letter-spacing: 1px;
+  .seatCount {
+    margin: 25px 0px;
+  }
 }

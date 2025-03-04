@@ -4,4 +4,5 @@ export interface ISeat {
   isNearWindow: boolean;
   isExtraLegroom: boolean;
   isNearExit: boolean;
+  isFiltered?: boolean;
 }

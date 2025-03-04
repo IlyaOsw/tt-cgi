@@ -1,21 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import styles from "./SeatSelection.module.scss";
+
 import { ISeat } from "../../../types/seat";
+import { SeatSelectionPropsType } from "../../../types/seat-selection";
+import styles from "./SeatSelection.module.scss";
 
-interface SeatSelectionProps {
-  seats: {
-    id: string;
-    occupied: boolean;
-    nearWindow: boolean;
-    extraLegroom: boolean;
-    nearExit: boolean;
-  }[];
-}
-
-export const SeatSelection: React.FC<SeatSelectionProps> = ({ seats }) => {
-  const groupSeatsByRow = (seats: any) => {
+export const SeatSelection: React.FC<SeatSelectionPropsType> = ({ seats }) => {
+  const groupSeatsByRow = (seats: ISeat[]) => {
     const grouped: { [key: string]: typeof seats } = {};
-    seats.forEach((seat: any) => {
+    seats.forEach((seat: ISeat) => {
       const rowNumber = seat.id.slice(0, seat.id.length - 1);
       if (!grouped[rowNumber]) {
         grouped[rowNumber] = [];
@@ -46,7 +38,12 @@ export const SeatSelection: React.FC<SeatSelectionProps> = ({ seats }) => {
                     id={seat.id}
                     disabled={seat.isAvailable}
                   />
-                  <label htmlFor={seat.id}>{seat.id}</label>
+                  <label
+                    htmlFor={seat.id}
+                    className={`${seat.isFiltered ? styles.filteredSeat : ""}`}
+                  >
+                    {seat.id}
+                  </label>
                 </li>
               ))}
             </ol>

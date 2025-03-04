@@ -1,18 +1,35 @@
+import { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
-import { Box, Button, Card, CardContent, Typography } from "@mui/material";
-import { Link, useParams } from "react-router-dom";
+import { Box, Card, CardContent, Typography } from "@mui/material";
+import { useParams } from "react-router-dom";
 
 import { Filter } from "../../components/Filter/Filter";
 import { mockData } from "../../store";
-import { convertMinutesToHours } from "../../utils/convert-minutes-to-hours";
-import { convertTime } from "../../utils/convert-time";
 import { SeatSelection } from "./SeatSelection/SeatSelection";
+import { ISeat } from "../../types/seat";
+
+import { TicketInformation } from "./TicketInfromation/TicketInformation";
 import styles from "./TicketSelection.module.scss";
 
 const TicketSelection: React.FC = () => {
+  const [sortedSeats, setSortedSeats] = useState<ISeat[]>([]);
   const { id } = useParams<{ id: string }>();
 
   const flight = mockData.find((flight) => flight.id === Number(id));
+
+  const clearFilters = (): void => {
+    setSortedSeats(
+      flight!.seats.map((seat) => ({ ...seat, isFiltered: false }))
+    );
+  };
+
+  const filterByWindowSeats = () => {
+    const windowSeats = flight!.seats.map((seat) => ({
+      ...seat,
+      isFiltered: ["A", "F"].includes(seat.id.slice(-1)) && !seat.isAvailable,
+    }));
+    setSortedSeats(windowSeats);
+  };
 
   if (!flight) {
     return (
@@ -25,10 +42,10 @@ const TicketSelection: React.FC = () => {
   return (
     <>
       <Filter label="Sorteeri istekoha(d)">
-        <MenuItem value="" onClick={() => {}}>
+        <MenuItem value="" onClick={clearFilters}>
           <em>Tühista filtrid</em>
         </MenuItem>
-        <MenuItem value="isNearWindow" onClick={() => {}}>
+        <MenuItem value="isNearWindow" onClick={filterByWindowSeats}>
           Istekoht akna all
         </MenuItem>
         <MenuItem value="isExtraLegroom" onClick={() => {}}>
@@ -37,42 +54,21 @@ const TicketSelection: React.FC = () => {
         <MenuItem value="isNearExit" onClick={() => {}}>
           Lähedal väljapääsule
         </MenuItem>
-        {/* <MenuItem value="isDoubleSeat" onClick={() => {}}>
+        <MenuItem value="isDoubleSeat" onClick={() => {}}>
           Istekohad kõrvuti
-        </MenuItem> */}
+        </MenuItem>
       </Filter>
+
       <Box className={styles.container}>
+        <TicketInformation flight={flight} />
         <Card className={styles.card}>
           <CardContent>
-            <Typography variant="h5">
-              Lend algab: {flight.departureLocation} - Sihtkoht:{" "}
-              {flight.arrivalLocation}
-            </Typography>
-            <Typography variant="h5" gutterBottom>
-              Hind: {flight.price}€
-            </Typography>
-            <Typography variant="h6">
-              Väljumine: {convertTime(flight.departureDateTime)}
-            </Typography>
-            <Typography variant="h6" gutterBottom>
-              Saabumine: {convertTime(flight.arrivalDateTime)}
-            </Typography>
-            <Typography variant="h6">
-              Lennuaeg: {convertMinutesToHours(flight.duration)}
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card className={styles.card}>
-          <CardContent>
-            <SeatSelection seats={flight.seats} />
+            <SeatSelection
+              seats={sortedSeats.length ? sortedSeats : flight.seats}
+            />
           </CardContent>
         </Card>
       </Box>
-      <Link to="/">
-        <Button variant="contained" fullWidth className={styles.link}>
-          Tagasi lennuvaliku juurde
-        </Button>
-      </Link>
     </>
   );
 };
