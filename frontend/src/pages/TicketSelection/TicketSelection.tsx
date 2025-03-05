@@ -1,43 +1,87 @@
 import { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 import { Filter } from "../../components/Filter/Filter";
 import { mockData } from "../../store";
 import { SeatSelection } from "./SeatSelection/SeatSelection";
-import { ISeat } from "../../types/seat";
+import { ISeat } from "types/seat";
 
 import { TicketInformation } from "./TicketInfromation/TicketInformation";
 import styles from "./TicketSelection.module.scss";
 
 const TicketSelection: React.FC = () => {
-  const [sortedSeats, setSortedSeats] = useState<ISeat[]>([]);
+  const [sortedSeats, setSortedSeatsIds] = useState<string[]>([]);
   const { id } = useParams<{ id: string }>();
 
   const flight = mockData.find((flight) => flight.id === Number(id));
 
-  const clearFilters = (): void => {
-    setSortedSeats(
-      flight!.seats.map((seat) => ({ ...seat, isFiltered: false }))
-    );
+  const clearFilters = (): void => setSortedSeatsIds([]);
+
+  const sortByWindowSeats = (): void => {
+    const windowSeatIds = flight!.seats
+      .filter(
+        (seat) => ["A", "F"].includes(seat.id.slice(-1)) && seat.isAvailable
+      )
+      .map((seat) => seat.id);
+
+    setSortedSeatsIds(windowSeatIds);
   };
 
-  const filterByWindowSeats = () => {
-    const windowSeats = flight!.seats.map((seat) => ({
-      ...seat,
-      isFiltered: ["A", "F"].includes(seat.id.slice(-1)) && !seat.isAvailable,
-    }));
-    setSortedSeats(windowSeats);
+  const sortByExtraLegroom = (): void => {
+    const extraLegroomIds = flight!.seats
+      .filter((seat) => parseInt(seat.id) === 1 && seat.isAvailable)
+      .map((seat) => seat.id);
+
+    setSortedSeatsIds(extraLegroomIds);
   };
 
-  if (!flight) {
-    return (
-      <Typography variant="h5" sx={{ textAlign: "center", color: "#fff" }}>
-        Flight not found
-      </Typography>
+  const sortByNearExit = (): void => {
+    const nearExitIds = flight!.seats
+      .filter((seat) => [1, 6].includes(parseInt(seat.id)) && seat.isAvailable)
+      .map((seat) => seat.id);
+
+    setSortedSeatsIds(nearExitIds);
+  };
+
+  // FIX
+  const sortByDoubleSeats = (): void => {
+    const doubleSeatsIds: string[] = [];
+
+    const groupedSeats = flight!.seats.reduce<{ [key: string]: ISeat[] }>(
+      (acc, seat) => {
+        const row = seat.id.slice(0, -1);
+        if (!acc[row]) {
+          acc[row] = [];
+        }
+        acc[row].push(seat);
+        return acc;
+      },
+      {}
     );
-  }
+
+    Object.values(groupedSeats).forEach((seats) => {
+      seats.sort((a, b) => a.id.localeCompare(b.id));
+
+      for (let i = 0; i < seats.length - 1; i++) {
+        const currentSeat = seats[i];
+        const nextSeat = seats[i + 1];
+
+        if (
+          currentSeat.isAvailable &&
+          nextSeat.isAvailable &&
+          !["C"].includes(currentSeat.id.slice(-1)) &&
+          currentSeat.id.charCodeAt(currentSeat.id.length - 1) + 1 ===
+            nextSeat.id.charCodeAt(nextSeat.id.length - 1)
+        ) {
+          doubleSeatsIds.push(currentSeat.id, nextSeat.id);
+        }
+      }
+    });
+
+    setSortedSeatsIds(doubleSeatsIds);
+  };
 
   return (
     <>
@@ -45,27 +89,24 @@ const TicketSelection: React.FC = () => {
         <MenuItem value="" onClick={clearFilters}>
           <em>Tühista filtrid</em>
         </MenuItem>
-        <MenuItem value="isNearWindow" onClick={filterByWindowSeats}>
+        <MenuItem value="isNearWindow" onClick={sortByWindowSeats}>
           Istekoht akna all
         </MenuItem>
-        <MenuItem value="isExtraLegroom" onClick={() => {}}>
+        <MenuItem value="isExtraLegroom" onClick={sortByExtraLegroom}>
           Rohkem jalaruumi
         </MenuItem>
-        <MenuItem value="isNearExit" onClick={() => {}}>
+        <MenuItem value="isNearExit" onClick={sortByNearExit}>
           Lähedal väljapääsule
         </MenuItem>
-        <MenuItem value="isDoubleSeat" onClick={() => {}}>
+        <MenuItem value="isDoubleSeat" onClick={sortByDoubleSeats}>
           Istekohad kõrvuti
         </MenuItem>
       </Filter>
-
       <Box className={styles.container}>
-        <TicketInformation flight={flight} />
+        <TicketInformation flight={flight!} />
         <Card className={styles.card}>
           <CardContent>
-            <SeatSelection
-              seats={sortedSeats.length ? sortedSeats : flight.seats}
-            />
+            <SeatSelection seats={flight!.seats} sortedSeats={sortedSeats} />
           </CardContent>
         </Card>
       </Box>

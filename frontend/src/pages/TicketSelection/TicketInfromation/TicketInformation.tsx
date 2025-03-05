@@ -14,11 +14,11 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { convertMinutesToHours } from "../../../utils/convert-minutes-to-hours";
-import { convertTime } from "../../../utils/convert-time";
 
 import styles from "./TicketInformation.module.scss";
-import { TicketInformationPropsType } from "../../../types/ticket-information";
+import { TicketInformationPropsType } from "types/ticket-information";
 import { TicketPurchase } from "./TicketPurchase/TicketPurchase";
+import { convertTime } from "../../../utils/convert-time";
 
 export const TicketInformation: React.FC<TicketInformationPropsType> = ({
   flight,
@@ -49,14 +49,8 @@ export const TicketInformation: React.FC<TicketInformationPropsType> = ({
         <Box className={styles.seatCount}>
           <Typography variant="h5">Osta pilet</Typography>
           <FormControl fullWidth>
-            <InputLabel id="count">Kogus</InputLabel>
-            <Select
-              labelId="count"
-              id="count"
-              value={seatCount}
-              label="count"
-              onChange={handleChange}
-            >
+            <InputLabel>Kogus</InputLabel>
+            <Select value={seatCount} label="count" onChange={handleChange}>
               <MenuItem value={1}>1</MenuItem>
               <MenuItem value={2}>2</MenuItem>
             </Select>

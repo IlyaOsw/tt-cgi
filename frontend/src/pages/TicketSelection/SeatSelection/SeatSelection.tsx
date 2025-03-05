@@ -1,10 +1,14 @@
 import { Box, Typography } from "@mui/material";
 
-import { ISeat } from "../../../types/seat";
-import { SeatSelectionPropsType } from "../../../types/seat-selection";
+import { ISeat } from "types/seat";
+import { SeatSelectionPropsType } from "types/seat-selection";
 import styles from "./SeatSelection.module.scss";
 
-export const SeatSelection: React.FC<SeatSelectionPropsType> = ({ seats }) => {
+//FIX
+export const SeatSelection: React.FC<SeatSelectionPropsType> = ({
+  seats,
+  sortedSeats,
+}) => {
   const groupSeatsByRow = (seats: ISeat[]) => {
     const grouped: { [key: string]: typeof seats } = {};
     seats.forEach((seat: ISeat) => {
@@ -36,11 +40,13 @@ export const SeatSelection: React.FC<SeatSelectionPropsType> = ({ seats }) => {
                   <input
                     type="checkbox"
                     id={seat.id}
-                    disabled={seat.isAvailable}
+                    disabled={!seat.isAvailable}
                   />
                   <label
                     htmlFor={seat.id}
-                    className={`${seat.isFiltered ? styles.filteredSeat : ""}`}
+                    className={`${
+                      sortedSeats.includes(seat.id) ? styles.filteredSeat : ""
+                    }`}
                   >
                     {seat.id}
                   </label>

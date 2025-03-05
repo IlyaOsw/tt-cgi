@@ -1,5 +1,5 @@
 import { IFlight } from "./flight";
 
-export type FlightCardPropsType = {
+export interface IFlightCard {
   flight: IFlight;
-};
+}

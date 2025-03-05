@@ -7,12 +7,13 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import { FlightCardPropsType } from "../../../types/flight-card";
+import { IFlightCard } from "types/flight-card";
 import { convertMinutesToHours } from "../../../utils/convert-minutes-to-hours";
 import { convertTime } from "../../../utils/convert-time";
+
 import styles from "./FlightCard.module.scss";
 
-export const FlightCard: React.FC<FlightCardPropsType> = ({ flight }) => {
+export const FlightCard: React.FC<IFlightCard> = ({ flight }) => {
   return (
     <Card className={styles.container}>
       <CardActionArea>

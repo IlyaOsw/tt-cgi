@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { MenuItem, Typography } from "@mui/material";
 
-import { IFlight } from "../../types/flight";
-import { Filter } from "../../components/Filter/Filter";
+import { IFlight } from "types/flight";
 import { FlightCard } from "./FlightCard/FlightCard";
+
 import { mockData } from "../../store";
+import { Filter } from "../../components/Filter/Filter";
 
 export const FlightSelection: React.FC = () => {
   const [sortedFlights, setSortedFlights] = useState<IFlight[]>(mockData);

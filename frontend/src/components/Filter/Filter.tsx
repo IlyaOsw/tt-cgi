@@ -1,7 +1,6 @@
 import { ReactNode, useState } from "react";
 import {
   SelectChangeEvent,
-  Box,
   FormControl,
   InputLabel,
   Select,
@@ -19,18 +18,15 @@ export const Filter: React.FC<IFilter> = ({ label, children }) => {
     setFilter(event.target.value as string);
 
   return (
-    <Box sx={{ margin: "25px 0px", backgroundColor: "#f8f8f8" }}>
-      <FormControl variant="filled" fullWidth>
-        <InputLabel id="filter">{label}</InputLabel>
-        <Select
-          labelId="filter"
-          id="filter"
-          value={filter}
-          onChange={handleChange}
-        >
-          {children}
-        </Select>
-      </FormControl>
-    </Box>
+    <FormControl
+      variant="filled"
+      fullWidth
+      sx={{ margin: "15px 0px", backgroundColor: "#f8f8f8" }}
+    >
+      <InputLabel>{label}</InputLabel>
+      <Select id="filter" value={filter} onChange={handleChange}>
+        {children}
+      </Select>
+    </FormControl>
   );
 };
