@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MenuItem, Typography } from "@mui/material";
 
 import { IFlight } from "types/flight";
@@ -6,9 +6,16 @@ import { FlightCard } from "./FlightCard/FlightCard";
 
 import { mockData } from "../../store";
 import { Filter } from "../../components/Filter/Filter";
+import axios from "axios";
 
 export const FlightSelection: React.FC = () => {
   const [sortedFlights, setSortedFlights] = useState<IFlight[]>(mockData);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    axios.get("http://localhost:8080/flights").then((res) => setData(res.data));
+  }, []);
+  console.log(data);
 
   const clearFilters = (): void => setSortedFlights(mockData);
 

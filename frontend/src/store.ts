@@ -11,9 +11,6 @@ const generateSeats = (
       seats.push({
         id: `${row}${seat}`,
         isAvailable: Math.random() < occupied,
-        isNearWindow: seat === "A" || seat === "F",
-        isExtraLegroom: row === 1 || row === rows,
-        isNearExit: row === 1 || row === rows,
       });
     }
   }
