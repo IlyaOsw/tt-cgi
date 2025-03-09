@@ -1,4 +1,5 @@
 export interface ISeat {
-  id: string;
+  id: number;
+  seatId: string;
   isAvailable: boolean;
 }

@@ -4,7 +4,6 @@ import { ISeat } from "types/seat";
 import { SeatSelectionPropsType } from "types/seat-selection";
 import styles from "./SeatSelection.module.scss";
 
-//FIX
 export const SeatSelection: React.FC<SeatSelectionPropsType> = ({
   seats,
   sortedSeats,
@@ -12,7 +11,7 @@ export const SeatSelection: React.FC<SeatSelectionPropsType> = ({
   const groupSeatsByRow = (seats: ISeat[]) => {
     const grouped: { [key: string]: typeof seats } = {};
     seats.forEach((seat: ISeat) => {
-      const rowNumber = seat.id.slice(0, seat.id.length - 1);
+      const rowNumber = seat.seatId.slice(0, seat.seatId.length - 1);
       if (!grouped[rowNumber]) {
         grouped[rowNumber] = [];
       }
@@ -39,16 +38,18 @@ export const SeatSelection: React.FC<SeatSelectionPropsType> = ({
                 <li key={seat.id} className={styles.seat}>
                   <input
                     type="checkbox"
-                    id={seat.id}
+                    id={seat.seatId}
                     disabled={!seat.isAvailable}
                   />
                   <label
-                    htmlFor={seat.id}
+                    htmlFor={seat.seatId}
                     className={`${
-                      sortedSeats.includes(seat.id) ? styles.filteredSeat : ""
+                      sortedSeats.includes(seat.seatId)
+                        ? styles.filteredSeat
+                        : ""
                     }`}
                   >
-                    {seat.id}
+                    {seat.seatId}
                   </label>
                 </li>
               ))}

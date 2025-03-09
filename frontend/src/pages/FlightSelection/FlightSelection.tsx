@@ -3,41 +3,42 @@ import { MenuItem, Typography } from "@mui/material";
 
 import { IFlight } from "types/flight";
 import { FlightCard } from "./FlightCard/FlightCard";
-
-import { mockData } from "../../store";
+import { useFlightContext } from "../../context/FlightContext";
 import { Filter } from "../../components/Filter/Filter";
-import axios from "axios";
+import { Loader } from "../../components/Loader/Loader";
 
 export const FlightSelection: React.FC = () => {
-  const [sortedFlights, setSortedFlights] = useState<IFlight[]>(mockData);
-  const [data, setData] = useState([]);
+  const { data, loading } = useFlightContext();
+  const [filteredData, setFilteredData] = useState<IFlight[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:8080/flights").then((res) => setData(res.data));
-  }, []);
-  console.log(data);
+    setFilteredData(data);
+  }, [data]);
 
-  const clearFilters = (): void => setSortedFlights(mockData);
+  const clearFilters = (): void => setFilteredData(data);
 
   const sortByPrice = (): void =>
-    setSortedFlights([...mockData].sort((a, b) => a.price - b.price));
+    setFilteredData((prevData) =>
+      [...prevData].sort((a, b) => a.price - b.price)
+    );
 
   const sortByDate = (): void =>
-    setSortedFlights(
-      [...mockData].sort(
+    setFilteredData((prevData) =>
+      [...prevData].sort(
         (a, b) =>
-          new Date(a.departureDateTime).getTime() -
-          new Date(b.departureDateTime).getTime()
+          new Date(a.departureDatetime).getTime() -
+          new Date(b.departureDatetime).getTime()
       )
     );
 
-  const sortByDuration = (): void => {
-    setSortedFlights([...mockData].sort((a, b) => a.duration - b.duration));
-  };
+  const sortByDuration = (): void =>
+    setFilteredData((prevData) =>
+      [...prevData].sort((a, b) => a.duration - b.duration)
+    );
 
   const sortByArrivalLocation = (): void =>
-    setSortedFlights(
-      [...mockData].sort((a, b) =>
+    setFilteredData((prevData) =>
+      [...prevData].sort((a, b) =>
         a.arrivalLocation.localeCompare(b.arrivalLocation)
       )
     );
@@ -61,12 +62,14 @@ export const FlightSelection: React.FC = () => {
           Hinna järgi kasvavalt
         </MenuItem>
       </Filter>
-      {sortedFlights.length === 0 ? (
+      {loading ? (
+        <Loader />
+      ) : filteredData.length === 0 ? (
         <Typography variant="h5" sx={{ textAlign: "center", color: "#fff" }}>
           Hetkel lende pole.
         </Typography>
       ) : (
-        sortedFlights.map((flight: IFlight) => (
+        filteredData.map((flight: IFlight) => (
           <FlightCard flight={flight} key={flight.id} />
         ))
       )}

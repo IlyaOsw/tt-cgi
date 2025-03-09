@@ -3,9 +3,9 @@ import { ISeat } from "./seat";
 export interface IFlight {
   id: number;
   departureLocation: string;
-  departureDateTime: string;
+  departureDatetime: string;
   arrivalLocation: string;
-  arrivalDateTime: string;
+  arrivalDatetime: string;
   price: number;
   duration: number;
   seats: ISeat[];

@@ -1,21 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Box, Card, CardContent } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 import { Filter } from "../../components/Filter/Filter";
-import { mockData } from "../../store";
 import { SeatSelection } from "./SeatSelection/SeatSelection";
 import { ISeat } from "types/seat";
+import { IFlight } from "types/flight";
 
-import { TicketInformation } from "./TicketInfromation/TicketInformation";
 import styles from "./TicketSelection.module.scss";
+import { useFlightContext } from "../../context/FlightContext";
+import { TicketInformation } from "./TicketInfromation/TicketInformation";
+import { Loader } from "../../components/Loader/Loader";
 
 const TicketSelection: React.FC = () => {
+  const { data, loading } = useFlightContext();
   const [sortedSeats, setSortedSeatsIds] = useState<string[]>([]);
   const { id } = useParams<{ id: string }>();
 
-  const flight = mockData.find((flight) => flight.id === Number(id));
+  const getFlightById = (id: string | undefined): IFlight | undefined => {
+    return data.find((flight) => flight.id.toString() === id);
+  };
+
+  const flight = getFlightById(id);
+
+  useEffect(() => {
+    if (flight) {
+      console.log(flight.seats);
+    }
+  }, [flight]);
 
   const clearFilters = (): void => setSortedSeatsIds([]);
 
@@ -23,9 +36,10 @@ const TicketSelection: React.FC = () => {
     if (flight) {
       const windowSeatIds = flight.seats
         .filter(
-          (seat) => ["A", "F"].includes(seat.id.slice(-1)) && seat.isAvailable
+          (seat: ISeat) =>
+            ["A", "F"].includes(seat.seatId.slice(-1)) && seat.isAvailable
         )
-        .map((seat) => seat.id);
+        .map((seat: ISeat) => seat.seatId);
 
       setSortedSeatsIds(windowSeatIds);
     }
@@ -34,8 +48,10 @@ const TicketSelection: React.FC = () => {
   const sortByExtraLegroom = (): void => {
     if (flight) {
       const extraLegroomIds = flight.seats
-        .filter((seat) => parseInt(seat.id) === 1 && seat.isAvailable)
-        .map((seat) => seat.id);
+        .filter(
+          (seat: ISeat) => parseInt(seat.seatId) === 1 && seat.isAvailable
+        )
+        .map((seat: ISeat) => seat.seatId);
 
       setSortedSeatsIds(extraLegroomIds);
     }
@@ -45,9 +61,10 @@ const TicketSelection: React.FC = () => {
     if (flight) {
       const nearExitIds = flight.seats
         .filter(
-          (seat) => [1, 6].includes(parseInt(seat.id)) && seat.isAvailable
+          (seat: ISeat) =>
+            [1, 6].includes(parseInt(seat.seatId)) && seat.isAvailable
         )
-        .map((seat) => seat.id);
+        .map((seat: ISeat) => seat.seatId);
 
       setSortedSeatsIds(nearExitIds);
     }
@@ -60,7 +77,7 @@ const TicketSelection: React.FC = () => {
     if (flight) {
       const groupedSeats = flight.seats.reduce<{ [key: string]: ISeat[] }>(
         (acc, seat) => {
-          const row = seat.id.slice(0, -1);
+          const row = seat.seatId.slice(0, -1);
           if (!acc[row]) {
             acc[row] = [];
           }
@@ -71,7 +88,7 @@ const TicketSelection: React.FC = () => {
       );
 
       Object.values(groupedSeats).forEach((seats) => {
-        seats.sort((a, b) => a.id.localeCompare(b.id));
+        seats.sort((a, b) => a.seatId.localeCompare(b.seatId));
 
         for (let i = 0; i < seats.length - 1; i++) {
           const currentSeat = seats[i];
@@ -80,11 +97,11 @@ const TicketSelection: React.FC = () => {
           if (
             currentSeat.isAvailable &&
             nextSeat.isAvailable &&
-            !["C"].includes(currentSeat.id.slice(-1)) &&
-            currentSeat.id.charCodeAt(currentSeat.id.length - 1) + 1 ===
-              nextSeat.id.charCodeAt(nextSeat.id.length - 1)
+            !["C"].includes(currentSeat.seatId.slice(-1)) &&
+            currentSeat.seatId.charCodeAt(currentSeat.seatId.length - 1) + 1 ===
+              nextSeat.seatId.charCodeAt(nextSeat.seatId.length - 1)
           ) {
-            doubleSeatsIds.push(currentSeat.id, nextSeat.id);
+            doubleSeatsIds.push(currentSeat.seatId, nextSeat.seatId);
           }
         }
       });
@@ -112,14 +129,17 @@ const TicketSelection: React.FC = () => {
           Istekohad kõrvuti
         </MenuItem>
       </Filter>
-      <Box className={styles.container}>
-        <TicketInformation flight={flight!} />
-        <Card className={styles.card}>
-          <CardContent>
-            <SeatSelection seats={flight!.seats} sortedSeats={sortedSeats} />
-          </CardContent>
-        </Card>
-      </Box>
+      {loading && <Loader />}
+      {flight && (
+        <Box className={styles.container}>
+          <TicketInformation flight={flight} />
+          <Card className={styles.card}>
+            <CardContent>
+              <SeatSelection seats={flight.seats} sortedSeats={sortedSeats} />
+            </CardContent>
+          </Card>
+        </Box>
+      )}
     </>
   );
 };

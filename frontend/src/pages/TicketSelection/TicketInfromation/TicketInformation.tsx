@@ -37,10 +37,10 @@ export const TicketInformation: React.FC<TicketInformationPropsType> = ({
           {flight.arrivalLocation}
         </Typography>
         <Typography variant="h6">
-          Väljumine | {convertTime(flight.departureDateTime)}
+          Väljumine | {convertTime(flight.departureDatetime)}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          Saabumine | {convertTime(flight.arrivalDateTime)}
+          Saabumine | {convertTime(flight.arrivalDatetime)}
         </Typography>
         <Typography variant="h6">
           Lennuaeg | {convertMinutesToHours(flight.duration)}

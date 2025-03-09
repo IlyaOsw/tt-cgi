@@ -22,7 +22,7 @@ export const FlightCard: React.FC<IFlightCard> = ({ flight }) => {
             <Box>
               <Typography variant="h6">{flight.departureLocation}</Typography>
               <Typography variant="body1">
-                {convertTime(flight.departureDateTime)}
+                {convertTime(flight.departureDatetime)}
               </Typography>
             </Box>
             <Box className={styles.pricaAndDuration}>
@@ -35,7 +35,7 @@ export const FlightCard: React.FC<IFlightCard> = ({ flight }) => {
             <Box>
               <Typography variant="h6">{flight.arrivalLocation}</Typography>
               <Typography variant="body1">
-                {convertTime(flight.arrivalDateTime)}
+                {convertTime(flight.arrivalDatetime)}
               </Typography>
             </Box>
           </CardContent>
