@@ -13,12 +13,13 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { convertMinutesToHours } from "../../../utils/convert-minutes-to-hours";
 
-import styles from "./TicketInformation.module.scss";
-import { TicketInformationPropsType } from "types/ticket-information";
-import { TicketPurchase } from "./TicketPurchase/TicketPurchase";
+import { convertMinutesToHours } from "../../../utils/convert-minutes-to-hours";
+import { TicketInformationPropsType } from "../../../types/ticket-information";
 import { convertTime } from "../../../utils/convert-time";
+
+import { TicketPurchase } from "./TicketPurchase/TicketPurchase";
+import styles from "./TicketInformation.module.scss";
 
 export const TicketInformation: React.FC<TicketInformationPropsType> = ({
   flight,

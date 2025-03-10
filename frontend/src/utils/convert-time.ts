@@ -1,4 +1,3 @@
-// AI
 export const convertTime = (dateTime: string): string => {
   return new Date(dateTime).toLocaleString("et-EE", {
     year: "numeric",

@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import { Box, Card, CardContent } from "@mui/material";
 import { useParams } from "react-router-dom";
 
 import { Filter } from "../../components/Filter/Filter";
-import { SeatSelection } from "./SeatSelection/SeatSelection";
-import { ISeat } from "types/seat";
-import { IFlight } from "types/flight";
-
-import styles from "./TicketSelection.module.scss";
-import { useFlightContext } from "../../context/FlightContext";
-import { TicketInformation } from "./TicketInfromation/TicketInformation";
+import { ISeat } from "../../types/seat";
+import { IFlight } from "../../types/flight";
 import { Loader } from "../../components/Loader/Loader";
+import { useFlightContext } from "../../context/FlightContext";
+
+import { TicketInformation } from "./TicketInfromation/TicketInformation";
+import { SeatSelection } from "./SeatSelection/SeatSelection";
+import styles from "./TicketSelection.module.scss";
 
 const TicketSelection: React.FC = () => {
   const { data, loading } = useFlightContext();
@@ -23,12 +23,6 @@ const TicketSelection: React.FC = () => {
   };
 
   const flight = getFlightById(id);
-
-  useEffect(() => {
-    if (flight) {
-      console.log(flight.seats);
-    }
-  }, [flight]);
 
   const clearFilters = (): void => setSortedSeatsIds([]);
 
@@ -73,7 +67,6 @@ const TicketSelection: React.FC = () => {
   // FIX
   const sortByDoubleSeats = (): void => {
     const doubleSeatsIds: string[] = [];
-
     if (flight) {
       const groupedSeats = flight.seats.reduce<{ [key: string]: ISeat[] }>(
         (acc, seat) => {
@@ -86,14 +79,11 @@ const TicketSelection: React.FC = () => {
         },
         {}
       );
-
       Object.values(groupedSeats).forEach((seats) => {
         seats.sort((a, b) => a.seatId.localeCompare(b.seatId));
-
         for (let i = 0; i < seats.length - 1; i++) {
           const currentSeat = seats[i];
           const nextSeat = seats[i + 1];
-
           if (
             currentSeat.isAvailable &&
             nextSeat.isAvailable &&
@@ -105,7 +95,6 @@ const TicketSelection: React.FC = () => {
           }
         }
       });
-
       setSortedSeatsIds(doubleSeatsIds);
     }
   };

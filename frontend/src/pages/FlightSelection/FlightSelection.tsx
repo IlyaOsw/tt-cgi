@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { MenuItem, Typography } from "@mui/material";
 
-import { IFlight } from "types/flight";
-import { FlightCard } from "./FlightCard/FlightCard";
+import { IFlight } from "../../types/flight";
 import { useFlightContext } from "../../context/FlightContext";
 import { Filter } from "../../components/Filter/Filter";
 import { Loader } from "../../components/Loader/Loader";
+
+import { FlightCard } from "./FlightCard/FlightCard";
 
 export const FlightSelection: React.FC = () => {
   const { data, loading } = useFlightContext();
@@ -18,13 +19,11 @@ export const FlightSelection: React.FC = () => {
   const clearFilters = (): void => setFilteredData(data);
 
   const sortByPrice = (): void =>
-    setFilteredData((prevData) =>
-      [...prevData].sort((a, b) => a.price - b.price)
-    );
+    setFilteredData([...data].sort((a, b) => a.price - b.price));
 
   const sortByDate = (): void =>
-    setFilteredData((prevData) =>
-      [...prevData].sort(
+    setFilteredData(
+      [...data].sort(
         (a, b) =>
           new Date(a.departureDatetime).getTime() -
           new Date(b.departureDatetime).getTime()
@@ -32,13 +31,11 @@ export const FlightSelection: React.FC = () => {
     );
 
   const sortByDuration = (): void =>
-    setFilteredData((prevData) =>
-      [...prevData].sort((a, b) => a.duration - b.duration)
-    );
+    setFilteredData([...data].sort((a, b) => a.duration - b.duration));
 
   const sortByArrivalLocation = (): void =>
-    setFilteredData((prevData) =>
-      [...prevData].sort((a, b) =>
+    setFilteredData(
+      [...data].sort((a, b) =>
         a.arrivalLocation.localeCompare(b.arrivalLocation)
       )
     );
@@ -64,7 +61,7 @@ export const FlightSelection: React.FC = () => {
       </Filter>
       {loading ? (
         <Loader />
-      ) : filteredData.length === 0 ? (
+      ) : data.length === 0 ? (
         <Typography variant="h5" sx={{ textAlign: "center", color: "#fff" }}>
           Hetkel lende pole.
         </Typography>

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button, Modal, Backdrop, Fade, Box, Typography } from "@mui/material";
 
-import { TicketPurchasePropsType } from "types/ticket-purchase";
+import { TicketPurchasePropsType } from "../../../../types/ticket-purchase";
+
 import styles from "./TicketPurchase.module.scss";
 
 export const TicketPurchase: React.FC<TicketPurchasePropsType> = ({

@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 
-import { IFlightCard } from "types/flight-card";
+import { IFlightCard } from "../../../types/flight-card";
 import { convertMinutesToHours } from "../../../utils/convert-minutes-to-hours";
 import { convertTime } from "../../../utils/convert-time";
 

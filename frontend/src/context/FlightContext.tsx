@@ -1,6 +1,7 @@
-import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
-import { IFlight } from "types/flight";
+import axios from "axios";
+
+import { IFlight } from "../types/flight";
 
 interface IFlightContext {
   data: IFlight[];
@@ -17,18 +18,20 @@ export const FlightProvider: React.FC<FlightProvider> = ({ children }) => {
   const [data, setData] = useState<IFlight[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
+  const fetchFlights = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get("http://localhost:8080/api/flights");
+      setData(response.data);
+    } catch (error) {
+      console.error("Error while flights fetching: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/api/flights")
-      .then((res) => {
-        setData(res.data);
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    fetchFlights();
   }, []);
 
   return (
