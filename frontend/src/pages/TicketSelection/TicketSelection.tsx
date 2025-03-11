@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 import { Filter } from "../../components/Filter/Filter";
 import { ISeat } from "../../types/seat";
-import { IFlight } from "../../types/flight";
 import { Loader } from "../../components/Loader/Loader";
 import { useFlightContext } from "../../context/FlightContext";
 
@@ -18,85 +17,74 @@ const TicketSelection: React.FC = () => {
   const [sortedSeats, setSortedSeatsIds] = useState<string[]>([]);
   const { id } = useParams<{ id: string }>();
 
-  const getFlightById = (id: string | undefined): IFlight | undefined => {
-    return data.find((flight) => flight.id.toString() === id);
-  };
+  const getFlightById = (id: string | undefined) =>
+    data.find((flight) => flight.id.toString() === id);
 
   const flight = getFlightById(id);
+
+  if (!flight) return;
 
   const clearFilters = (): void => setSortedSeatsIds([]);
 
   const sortByWindowSeats = (): void => {
-    if (flight) {
-      const windowSeatIds = flight.seats
-        .filter(
-          (seat: ISeat) =>
-            ["A", "F"].includes(seat.seatId.slice(-1)) && seat.isAvailable
-        )
-        .map((seat: ISeat) => seat.seatId);
+    const windowSeatIds = flight.seats
+      .filter(
+        (seat) => ["A", "F"].includes(seat.seatId.slice(-1)) && seat.isAvailable
+      )
+      .map((seat) => seat.seatId);
 
-      setSortedSeatsIds(windowSeatIds);
-    }
+    setSortedSeatsIds(windowSeatIds);
   };
 
   const sortByExtraLegroom = (): void => {
-    if (flight) {
-      const extraLegroomIds = flight.seats
-        .filter(
-          (seat: ISeat) => parseInt(seat.seatId) === 1 && seat.isAvailable
-        )
-        .map((seat: ISeat) => seat.seatId);
+    const extraLegroomIds = flight.seats
+      .filter((seat) => parseInt(seat.seatId) === 1 && seat.isAvailable)
+      .map((seat) => seat.seatId);
 
-      setSortedSeatsIds(extraLegroomIds);
-    }
+    setSortedSeatsIds(extraLegroomIds);
   };
 
   const sortByNearExit = (): void => {
-    if (flight) {
-      const nearExitIds = flight.seats
-        .filter(
-          (seat: ISeat) =>
-            [1, 6].includes(parseInt(seat.seatId)) && seat.isAvailable
-        )
-        .map((seat: ISeat) => seat.seatId);
+    const nearExitIds = flight.seats
+      .filter(
+        (seat) => [1, 6].includes(parseInt(seat.seatId)) && seat.isAvailable
+      )
+      .map((seat) => seat.seatId);
 
-      setSortedSeatsIds(nearExitIds);
-    }
+    setSortedSeatsIds(nearExitIds);
   };
 
-  // FIX
   const sortByDoubleSeats = (): void => {
     const doubleSeatsIds: string[] = [];
-    if (flight) {
-      const groupedSeats = flight.seats.reduce<{ [key: string]: ISeat[] }>(
-        (acc, seat) => {
-          const row = seat.seatId.slice(0, -1);
-          if (!acc[row]) {
-            acc[row] = [];
-          }
-          acc[row].push(seat);
-          return acc;
-        },
-        {}
-      );
-      Object.values(groupedSeats).forEach((seats) => {
-        seats.sort((a, b) => a.seatId.localeCompare(b.seatId));
-        for (let i = 0; i < seats.length - 1; i++) {
-          const currentSeat = seats[i];
-          const nextSeat = seats[i + 1];
-          if (
-            currentSeat.isAvailable &&
-            nextSeat.isAvailable &&
-            !["C"].includes(currentSeat.seatId.slice(-1)) &&
-            currentSeat.seatId.charCodeAt(currentSeat.seatId.length - 1) + 1 ===
-              nextSeat.seatId.charCodeAt(nextSeat.seatId.length - 1)
-          ) {
-            doubleSeatsIds.push(currentSeat.seatId, nextSeat.seatId);
-          }
-        }
-      });
-      setSortedSeatsIds(doubleSeatsIds);
-    }
+    const groupedSeats = flight.seats.reduce<{ [key: string]: ISeat[] }>(
+      (acc, seat) => {
+        const row = seat.seatId.slice(0, -1);
+        (acc[row] = acc[row] || []).push(seat);
+        return acc;
+      },
+      {}
+    );
+
+    const checkPair = (left: ISeat, right: ISeat): void => {
+      if (left.isAvailable && right.isAvailable) {
+        doubleSeatsIds.push(left.seatId, right.seatId);
+      }
+    };
+
+    Object.values(groupedSeats).forEach((seats) => {
+      seats.sort((a, b) => a.seatId.localeCompare(b.seatId));
+
+      if (seats[1]?.isAvailable) {
+        checkPair(seats[0], seats[1]);
+        checkPair(seats[1], seats[2]);
+      }
+      if (seats[4]?.isAvailable) {
+        checkPair(seats[3], seats[4]);
+        checkPair(seats[4], seats[5]);
+      }
+    });
+
+    setSortedSeatsIds(doubleSeatsIds);
   };
 
   return (

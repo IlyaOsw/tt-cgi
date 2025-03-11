@@ -5,7 +5,7 @@
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
 
--- Started on 2025-03-10 23:43:20
+-- Started on 2025-03-11 23:17:05
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -18,44 +18,6 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
---
--- TOC entry 221 (class 1255 OID 24669)
--- Name: generate_seats(); Type: FUNCTION; Schema: public; Owner: postgres
---
-
-CREATE FUNCTION public.generate_seats() RETURNS void
-    LANGUAGE plpgsql
-    AS $$
-DECLARE 
-    flight_rec RECORD;
-    rows INT := 6;
-    seats TEXT[] := ARRAY['A', 'B', 'C', 'D', 'E', 'F'];
-    seat_number TEXT;
-    is_available BOOLEAN;
-BEGIN
-    FOR flight_rec IN SELECT id FROM flights LOOP
-        FOR row IN 1..rows LOOP
-            FOREACH seat_number IN ARRAY seats LOOP
-                is_available := random() < 0.5;
-
-                INSERT INTO seats (flight_id, seat_number, is_available, is_near_window, is_extra_legroom, is_near_exit)
-                VALUES (
-                    flight_rec.id,
-                    CONCAT(row, seat_number),
-                    is_available,
-                    seat_number IN ('A', 'F'),
-                    row = 1 OR row = rows,
-                    row = 1 OR row = rows
-                );
-            END LOOP;
-        END LOOP;
-    END LOOP;
-END;
-$$;
-
-
-ALTER FUNCTION public.generate_seats() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -96,7 +58,7 @@ CREATE SEQUENCE public.flights_id_seq
 ALTER SEQUENCE public.flights_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4808 (class 0 OID 0)
+-- TOC entry 4807 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: flights_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -136,7 +98,7 @@ CREATE SEQUENCE public.seats_id_seq
 ALTER SEQUENCE public.seats_id_seq OWNER TO postgres;
 
 --
--- TOC entry 4809 (class 0 OID 0)
+-- TOC entry 4808 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: seats_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -145,7 +107,7 @@ ALTER SEQUENCE public.seats_id_seq OWNED BY public.seats.id;
 
 
 --
--- TOC entry 4647 (class 2604 OID 24651)
+-- TOC entry 4646 (class 2604 OID 24651)
 -- Name: flights id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -153,7 +115,7 @@ ALTER TABLE ONLY public.flights ALTER COLUMN id SET DEFAULT nextval('public.flig
 
 
 --
--- TOC entry 4648 (class 2604 OID 24739)
+-- TOC entry 4647 (class 2604 OID 24739)
 -- Name: seats id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -161,7 +123,7 @@ ALTER TABLE ONLY public.seats ALTER COLUMN id SET DEFAULT nextval('public.seats_
 
 
 --
--- TOC entry 4800 (class 0 OID 24648)
+-- TOC entry 4799 (class 0 OID 24648)
 -- Dependencies: 218
 -- Data for Name: flights; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -176,7 +138,7 @@ COPY public.flights (id, departure_location, departure_datetime, arrival_locatio
 
 
 --
--- TOC entry 4802 (class 0 OID 24736)
+-- TOC entry 4801 (class 0 OID 24736)
 -- Dependencies: 220
 -- Data for Name: seats; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -366,7 +328,7 @@ COPY public.seats (id, flight_id, seat_id, is_available) FROM stdin;
 
 
 --
--- TOC entry 4810 (class 0 OID 0)
+-- TOC entry 4809 (class 0 OID 0)
 -- Dependencies: 217
 -- Name: flights_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -375,7 +337,7 @@ SELECT pg_catalog.setval('public.flights_id_seq', 5, true);
 
 
 --
--- TOC entry 4811 (class 0 OID 0)
+-- TOC entry 4810 (class 0 OID 0)
 -- Dependencies: 219
 -- Name: seats_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -384,7 +346,7 @@ SELECT pg_catalog.setval('public.seats_id_seq', 180, true);
 
 
 --
--- TOC entry 4650 (class 2606 OID 24653)
+-- TOC entry 4649 (class 2606 OID 24653)
 -- Name: flights flights_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -393,7 +355,7 @@ ALTER TABLE ONLY public.flights
 
 
 --
--- TOC entry 4652 (class 2606 OID 24741)
+-- TOC entry 4651 (class 2606 OID 24741)
 -- Name: seats seats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -402,7 +364,7 @@ ALTER TABLE ONLY public.seats
 
 
 --
--- TOC entry 4653 (class 2606 OID 24742)
+-- TOC entry 4652 (class 2606 OID 24742)
 -- Name: seats seats_flight_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -410,7 +372,7 @@ ALTER TABLE ONLY public.seats
     ADD CONSTRAINT seats_flight_id_fkey FOREIGN KEY (flight_id) REFERENCES public.flights(id) ON DELETE CASCADE;
 
 
--- Completed on 2025-03-10 23:43:23
+-- Completed on 2025-03-11 23:17:06
 
 --
 -- PostgreSQL database dump complete
