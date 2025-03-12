@@ -37,10 +37,12 @@ export const TicketPurchase: React.FC<TicketPurchasePropsType> = ({
       >
         <Fade in={open}>
           <Box className={styles.modal}>
-            <Typography variant="h5">Aitäh ostu eest!</Typography>
+            <Typography variant="h5" gutterBottom>
+              Aitäh ostu eest!
+            </Typography>
             <Typography variant="h6">
-              Ostsite {seatCount} pilet{seatCount > 1 ? "it" : ""} hinnaga{" "}
-              {seatCount * flight.price}€.
+              Ostsite {seatCount} pilet{seatCount > 1 ? "it" : ""}
+              hinnaga {seatCount * flight.price}€.
             </Typography>
           </Box>
         </Fade>

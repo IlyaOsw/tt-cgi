@@ -6,7 +6,7 @@ Veebirakendus lennureiside valimiseks ja filtreerimiseks ning istekohtade soovit
 
 - **Backend:** Java (Spring Boot)
 - **Database:** PostgreSQL
-- **Frontend:** React, TypeScript, Material UI, Axios, React Router
+- **Frontend:** React (Vite), TypeScript, Material UI, Axios, React Router
 
 ## Projekti struktuur
 
@@ -46,14 +46,14 @@ mvn spring-boot:run
 ## Raskused ja lahendused
 
 - Database:
-  Probleem: Lennureiside tabeli struktuuri loomine, kus igal lennul on sisemised reisijate istmed.
+  Probleem: Lennureiside tabeli struktuuri loomine, kus igal lennul on kindlad reisijate istekohad.
 
-  Lahendus: Loodi andmebaas, kus on tabel flights, mis sisaldab lennureiside infot, ja tabel seats, mis on seotud tabeliga flights välisvõtmega flight_id.
+  Lahendus: Loodi andmebaas, kus on tabel 'flights', mis sisaldab lennureiside infot, ja tabel 'seats', mis on seotud tabeliga 'flights' välisvõtmega 'flight_id'.
 
 - Frontend:
-  Probleem: Istmete filtreerimine, et kaks reisijat saaksid istuda kõrvuti.
+  Probleem: Istekohtade filtreerimine, et kaks reisijat saaksid istuda kõrvuti.
 
-  Lahendus: Arendati funktsioon, mis jagab istmete massiivi ridadeks, kontrollib keskset istekohta ja, kui see on vaba, analüüsib vasakpoolsed ja parempoolsed istmed, et määrata, kas need sobivad kahele reisijale.
+  Lahendus: Arendati funktsioon, mis jagab istekohtade massiivi ridadeks, kontrollib keskmist istekohta ja, kui see on vaba, analüüsib vasakpoolsed ja parempoolsed istekohad, et määrata, kas need sobivad kahele reisijale.
 
 ## Kulutatud aeg
 
@@ -65,3 +65,9 @@ mvn spring-boot:run
 ## Informatsiooni allikad
 
 YouTube õppekursused, avatud allikad (Google), AI tööriistad (OpenAI, GitHub Copilot), isiklikud õppeprojektid.
+
+## Kommentaar
+
+Alustasin veebirakenduse arendamist frontendist ja kasutasin rakenduse toimimiseks mock-andmemassiivi. Seejärel mõtlesin läbi andmebaasi struktuuri ja tegin kaks tabelit: üks lendude ja teine reisijate istekohtade jaoks. Järgmine etapp oli andmebaasi ühendamine backendiga ja nende andmete töötlemine. Pärast seda asendasin mock-andmemassiivi päringuga andmebaasi, et saada andmeid otse sealt.
+
+Valisin just sellise lähenemisviisi, kuna spetsialiseerun rohkem frontendile ja arvasin, et andmebaasi ja backendiga võib tekkida raskusi. Seetõttu alustasin sellest, milles end kindlalt tunnen ning seejärel paralleelselt uute tehnoloogiate õppimisega videokoolituste abil hakkasin neid rakendama projekti.

@@ -53,7 +53,7 @@ export const FlightSelection: React.FC = () => {
           Kuupäeva järgi
         </MenuItem>
         <MenuItem value="duration" onClick={sortByDuration}>
-          Lühike lennuaeg
+          Lühim lennuaeg
         </MenuItem>
         <MenuItem value="price" onClick={sortByPrice}>
           Hinna järgi kasvavalt

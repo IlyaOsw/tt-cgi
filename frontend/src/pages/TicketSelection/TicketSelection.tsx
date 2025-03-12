@@ -54,6 +54,7 @@ const TicketSelection: React.FC = () => {
     setSortedSeatsIds(nearExitIds);
   };
 
+  // AI help
   const sortByDoubleSeats = (): void => {
     const doubleSeatsIds: string[] = [];
     const groupedSeats = flight.seats.reduce<{ [key: string]: ISeat[] }>(

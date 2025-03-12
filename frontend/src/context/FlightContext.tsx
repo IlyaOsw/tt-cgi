@@ -24,7 +24,7 @@ export const FlightProvider: React.FC<FlightProvider> = ({ children }) => {
       const response = await axios.get("http://localhost:8080/api/flights");
       setData(response.data);
     } catch (error) {
-      console.error("Error while flights fetching: ", error);
+      console.error("Error in flight provider while flights fetching: ", error);
     } finally {
       setLoading(false);
     }

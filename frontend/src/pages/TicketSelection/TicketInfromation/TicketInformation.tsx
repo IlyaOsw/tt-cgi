@@ -34,7 +34,7 @@ export const TicketInformation: React.FC<TicketInformationPropsType> = ({
     <Card className={styles.card}>
       <CardContent>
         <Typography variant="h5">
-          Lend algab - {flight.departureLocation} | Sihtkoht -{" "}
+          Alguspunkt - {flight.departureLocation} | Sihtpunkt -{" "}
           {flight.arrivalLocation}
         </Typography>
         <Typography variant="h6">
@@ -56,7 +56,7 @@ export const TicketInformation: React.FC<TicketInformationPropsType> = ({
               <MenuItem value={2}>2</MenuItem>
             </Select>
           </FormControl>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant="h5">
             Hind: {seatCount * flight.price}€
           </Typography>
         </Box>

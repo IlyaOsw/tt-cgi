@@ -3,7 +3,6 @@ package com.cgi.flights.service;
 import com.cgi.flights.model.Flight;
 import com.cgi.flights.repository.FlightRepository;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

@@ -5,6 +5,9 @@ import { groupSeatsByRow } from "../../../utils/group-seats";
 
 import styles from "./SeatSelection.module.scss";
 
+// Lennuki istekohtade plaan HTML-i ja CSS-i abil on võetud allolevalt linkist ning kohandatud projekti jaoks
+// https://codepen.io/priteshchandra/pen/voZdgq
+
 export const SeatSelection: React.FC<SeatSelectionPropsType> = ({
   seats,
   sortedSeats,
@@ -20,7 +23,7 @@ export const SeatSelection: React.FC<SeatSelectionPropsType> = ({
       </Box>
       <Box className={`${styles.exit} ${styles.fuselage}`}></Box>
       <ol className={`${styles.cabin} ${styles.fuselage}`}>
-        {/* AI */}
+        {/* AI help */}
         {Object.entries(groupedSeats).map(([row, seats]) => (
           <li key={row} className={styles.row}>
             <ol className={styles.seats}>

@@ -7,7 +7,7 @@ export const App: React.FC = () => {
   return (
     <>
       <Typography className={styles.title} variant="h4">
-        CGI suvepraktika provitöö
+        CGI suvepraktika proovitöö
       </Typography>
       <Routing />
     </>
