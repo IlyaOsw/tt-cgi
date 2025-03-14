@@ -1,5 +1,5 @@
-# Node.js зависимости
+# Node.js
 /frontend/node_modules/
 
-# Java build файлы
+# Java build
 /backend/target/

@@ -16,6 +16,8 @@ Veebirakendus lennureiside valimiseks ja filtreerimiseks ning istekohtade soovit
 
 ## Projekti käivitamine
 
+### 1.Standart
+
 ```bash
 # Andmebaas
 username - postgres
@@ -41,6 +43,33 @@ npm run dev
 cd backend
 mvn clean install
 mvn spring-boot:run
+
+## application.properties
+# Lokaalne andmebaasi ühendus
+spring.datasource.url=jdbc:postgresql://localhost:5432/flight_booking
+```
+
+### 2.Docker
+
+```bash
+# GitHubi repositooriumi kloonimine
+git clone https://github.com/IlyaOsw/tt-cgi.git
+
+# Üleminek projekti kausta
+cd ttcgi
+
+# Kõigi konteinerite ülesehitamine ja käivitamine sõltuvustega
+docker-compose up --build
+
+# Kontrollimine, kas kõik konteinerid on õigesti käivitatud
+docker ps
+
+# Kõigi konteinerite peatamine ja eemaldamine
+docker-compose down
+
+## application.properties
+# Docker konteinerite andmebaasi ühendus
+spring.datasource.url=jdbc:postgresql://db:5432/flight_booking
 ```
 
 ## Raskused ja lahendused

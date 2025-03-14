@@ -1,0 +1,48 @@
+services:
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    image: ilyaosw/flight_booking_frontend:latest
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - app_network
+    environment:
+    - API_URL=http://backend:8080
+
+  backend:
+    container_name: backend
+    build: ./backend
+    image: ilyaosw/flight_booking_backend:latest
+    env_file:
+      - ./backend/.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    networks:
+      - app_network
+
+  db:
+    container_name: db
+    image: postgres:17.4
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: flight_booking
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/flight_booking_dump.sql:/docker-entrypoint-initdb.d/flight_booking_dump.sql
+    networks:
+      - app_network
+
+volumes:
+  db_data:
+
+networks:
+  app_network:
+    driver: bridge

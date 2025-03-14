@@ -5,7 +5,7 @@
 -- Dumped from database version 17.4
 -- Dumped by pg_dump version 17.4
 
--- Started on 2025-03-11 23:17:05
+-- Started on 2025-03-13 13:43:24
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -372,7 +372,7 @@ ALTER TABLE ONLY public.seats
     ADD CONSTRAINT seats_flight_id_fkey FOREIGN KEY (flight_id) REFERENCES public.flights(id) ON DELETE CASCADE;
 
 
--- Completed on 2025-03-11 23:17:06
+-- Completed on 2025-03-13 13:43:27
 
 --
 -- PostgreSQL database dump complete
